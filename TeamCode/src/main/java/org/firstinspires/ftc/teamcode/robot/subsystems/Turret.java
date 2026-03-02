@@ -20,6 +20,8 @@ public class Turret extends SubsystemBase {
     private final ServoEx turret0;
     private final ServoEx turret1;
     private double targetAngle = Constants.Turret.RANGE_MAX_ANGLE / 2;
+    private double offset = 0;
+    private boolean locked = false;
     public Turret(HardwareMap hardwareMap) {
         turret0 = new SimpleServo(
                 hardwareMap, "leftTurret",
@@ -45,6 +47,25 @@ public class Turret extends SubsystemBase {
     }
 
     public void set(double servoTarget) {
+        if (!locked) {
+            servoTarget += (offset / Constants.Turret.GEAR_RATIO);
+
+            double center = Constants.Turret.RANGE_MAX_ANGLE / 2.0;
+
+            double maxServoOffset = Constants.Turret.RANGE / Constants.Turret.GEAR_RATIO;
+
+            double min = center - maxServoOffset;
+            double max = center + maxServoOffset;
+
+            servoTarget = Math.max(min, Math.min(max, servoTarget));
+
+            this.targetAngle = servoTarget;
+        }
+    }
+
+    public void autoSet(double servoTarget) {
+        servoTarget += (offset / Constants.Turret.GEAR_RATIO);
+
         double center = Constants.Turret.RANGE_MAX_ANGLE / 2.0;
 
         double maxServoOffset = Constants.Turret.RANGE / Constants.Turret.GEAR_RATIO;
@@ -54,7 +75,8 @@ public class Turret extends SubsystemBase {
 
         servoTarget = Math.max(min, Math.min(max, servoTarget));
 
-        this.targetAngle = servoTarget;
+        turret0.turnToAngle(servoTarget);
+        turret1.turnToAngle(servoTarget);
     }
 
     public boolean isHealthy() {
@@ -86,15 +108,37 @@ public class Turret extends SubsystemBase {
         );
     }
 
+    public void addOffset(double offset) {
+        this.offset += offset;
+    }
+
+    public void lockTurret() {
+        if (!locked) {
+            locked = true;
+            targetAngle = Constants.Turret.RANGE_MAX_ANGLE / 2;
+        } else {
+            locked = false;
+        }
+    }
+
     public Action goTo(Pose2d targetPose, Constants.Alliance alliance) {
         return new Action() {
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                double targetHeading = ShooterMath.getTurretTarget(targetPose, alliance);
-
-                set(targetHeading);
+                targetAngle = ShooterMath.getTurretTarget(targetPose, alliance);
 
                 return false;
+            }
+        };
+    }
+
+    public Action maintainHeading() {
+        return new Action() {
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                autoSet(targetAngle);
+
+                return true;
             }
         };
     }

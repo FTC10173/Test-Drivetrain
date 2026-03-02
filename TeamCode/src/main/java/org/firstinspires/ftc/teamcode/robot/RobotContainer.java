@@ -81,6 +81,10 @@ public class RobotContainer {
                 new ResetYawCommand(drive)
         );
 
+        controls.lockTurretTrigger.whileActiveOnce(
+                new LockTurretCommand(turret)
+        );
+
         controls.upTrigger.whileActiveOnce(
                 new Test(shooter, () -> true)
         );
@@ -109,7 +113,10 @@ public class RobotContainer {
         // Set default limelight command - updating localization
         limelight.setDefaultCommand(
                 new DefaultLimelight(
-                        limelight, drive.getLocalizer()
+                        limelight,
+                        drive.getLocalizer(),
+                        alliance,
+                        turret::addOffset
                 )
         );
 

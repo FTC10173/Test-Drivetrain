@@ -13,6 +13,7 @@ public final class BlueFullClose extends LinearOpMode {
     public void runOpMode() {
 
         Pose2d startPose = Constants.StartingPoses.BLUE_CLOSE;
+        Pose2d BLUE_CLOSE_BACK = Constants.ShootingPoses.BLUE_CLOSE_BACK;
         Pose2d BLUE_CLOSE = Constants.ShootingPoses.BLUE_CLOSE;
         Pose2d PARK = Constants.ParkingPoses.BLUE_CLOSE;
 
@@ -27,13 +28,13 @@ public final class BlueFullClose extends LinearOpMode {
                 .moveAndShoot(FEED_TIME, BLUE_CLOSE)
                 .alignWithArtifacts()
                 .straightIntake()
-                .moveAndShoot(FEED_TIME, BLUE_CLOSE)
+                .moveAndShoot(FEED_TIME, BLUE_CLOSE_BACK)
                 .alignWithArtifacts()
                 .straightIntake()
-                .moveAndShoot(FEED_TIME, BLUE_CLOSE)
+                .moveAndShoot(FEED_TIME, BLUE_CLOSE_BACK)
                 .alignWithArtifacts()
                 .straightIntake()
-                .moveAndShoot(FEED_TIME, BLUE_CLOSE)
+                .moveAndShoot(FEED_TIME, BLUE_CLOSE_BACK)
                 .moveToPose(PARK);
 
         waitForStart();

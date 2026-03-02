@@ -7,6 +7,7 @@ import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.qualcomm.hardware.limelightvision.LLResult;
+import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.Roadrunner.Localizer;
 import org.firstinspires.ftc.teamcode.robot.Constants;
@@ -14,8 +15,9 @@ import org.firstinspires.ftc.teamcode.robot.ShooterMath;
 import org.firstinspires.ftc.teamcode.robot.commands.*;
 import org.firstinspires.ftc.teamcode.robot.subsystems.*;
 
+import java.util.List;
+
 public class Robot {
-    private final HardwareMap hardwareMap;
 
     // Subsystems
     private final Drive drive;
@@ -27,16 +29,15 @@ public class Robot {
 
     // BlackBoard
     private final Constants.Alliance alliance;
-    private final Pose2d startPose;
 
     public Robot(HardwareMap hardwareMap, Constants.Alliance alliance, Pose2d startPose) {
-        this.hardwareMap = hardwareMap;
 
         this.alliance = alliance;
         Constants.BlackBoard.put(Constants.Keys.ALLIANCE, alliance);
 
-        this.startPose = startPose;
         Constants.BlackBoard.put(Constants.Keys.POSE, startPose);
+
+        Constants.BlackBoard.clear();
 
         // Initialize subsystems
         limelight = new Limelight(hardwareMap);
@@ -102,22 +103,19 @@ public class Robot {
 
                 if (result != null && result.isValid()) {
                     poseEstimator.addLimelight(result);
+
+                    List<LLResultTypes.FiducialResult> fiducials = result.getFiducialResults();
+                    for (LLResultTypes.FiducialResult fiducial : fiducials) {
+                        int id = fiducial.getFiducialId();
+                        if (id == Constants.Tags.getID(alliance)) {
+                            turret.addOffset(fiducial.getTargetXDegrees());
+                            break;
+                        }
+                    }
                 }
 
                 return true;
             }
         };
     }
-
-    public static class DriverInputs {
-        public double LeftY;
-        public double LeftX;
-        public double RightX;
-        public DriverInputs(double LeftY, double LeftX, double RightX) {
-            this.LeftY = LeftY;
-            this.LeftX = LeftX;
-            this.RightX = RightX;
-        }
-    }
-
 }

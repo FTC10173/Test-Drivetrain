@@ -27,7 +27,9 @@ public final class Constants {
     
     public static class ShootingPoses {
         public static final Pose2d BLUE_CLOSE = new Pose2d(-18, -18, Math.toRadians(225)); // 46.86149806
+        public static Pose2d BLUE_CLOSE_BACK = new Pose2d(-18, -18, Math.toRadians(270));
         public static final Pose2d RED_CLOSE = new Pose2d(-18, 18, Math.toRadians(135)); // 0.001368206908*46.86149806
+        public static Pose2d RED_CLOSE_BACK = new Pose2d(-18, 18, Math.toRadians(90));
         public static final Pose2d BLUE_FAR = new Pose2d(54, -16, Math.toRadians(203.5)); // 112.6410227
         public static final Pose2d RED_FAR = new Pose2d(54, 16, Math.toRadians(156.5)); // 112.6410227
     }
@@ -54,6 +56,14 @@ public final class Constants {
         }
     }
 
+    public static class Tags {
+        public static int BLUE = 20;
+        public static int RED = 24;
+
+        public static int getID(Alliance alliance) {
+            return alliance == Alliance.BLUE ? BLUE : RED ;
+        }
+    }
     
     public static class ShootingPower { // 0.001368206908
         public static final double CLOSE = 0.375;

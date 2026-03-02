@@ -102,6 +102,7 @@ public class AutoBuilder {
     /* Shooter Actions */
 
     public AutoBuilder moveAndShoot(double feedTime, Pose2d targetPose) {
+
         actions.add(new Action() {
 
             private Action inner = null;
@@ -109,7 +110,7 @@ public class AutoBuilder {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
 
-                // Build ONCE
+                // build once
                 if (inner == null) {
 
                     // get current pose from localizer
@@ -586,6 +587,7 @@ public class AutoBuilder {
                 shooter.maintainVelocity(),
                 led.updateIndicatorAction(),
                 robot.estimatePose(),
+                turret.maintainHeading(),
                 savePose()
         );
     }

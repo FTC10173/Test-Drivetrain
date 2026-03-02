@@ -7,9 +7,10 @@ public class DriverControls {
     public final GamepadEx driver;
 
     // Buttons
-    public final GamepadButton shootButton;       // Left Bumper for shooting
-    public final GamepadButton intakeButton;  // Right Bumper for full intake
-    public final GamepadButton yawResetButton;    // Y button for yaw reset
+    public final GamepadButton shootButton; // Left Bumper for shooting
+    public final GamepadButton intakeButton; // Right Bumper for full intake
+    public final GamepadButton yawResetButton; // Back button for yaw reset
+    public final GamepadButton lockTurretButton; // Y button to lock turret
 
     public final GamepadButton upTest;
     public final GamepadButton downTest;
@@ -19,6 +20,7 @@ public class DriverControls {
     public final Trigger intakeTrigger;
     public final Trigger outtakeTrigger;
     public final Trigger yawResetTrigger;
+    public final Trigger lockTurretTrigger;
 
     public final Trigger upTrigger;
     public final Trigger downTrigger;
@@ -30,6 +32,7 @@ public class DriverControls {
         shootButton = driver.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER);
         intakeButton = driver.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER);
         yawResetButton = driver.getGamepadButton(GamepadKeys.Button.BACK);
+        lockTurretButton = driver.getGamepadButton(GamepadKeys.Button.Y);
 
         upTest = driver.getGamepadButton(GamepadKeys.Button.DPAD_UP);
         downTest = driver.getGamepadButton(GamepadKeys.Button.DPAD_DOWN);
@@ -39,6 +42,7 @@ public class DriverControls {
         intakeTrigger = new Trigger(intakeButton::get);
         outtakeTrigger = new Trigger(this::outtakeTrigger);
         yawResetTrigger = new Trigger(yawResetButton::get);
+        lockTurretTrigger = new Trigger(lockTurretButton::get);
 
         upTrigger = new Trigger(upTest::get);
         downTrigger = new Trigger(downTest::get);
