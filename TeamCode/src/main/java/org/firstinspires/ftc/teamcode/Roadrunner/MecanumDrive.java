@@ -305,12 +305,11 @@ public final class MecanumDrive {
             Pose2d error = txWorldTarget.value().minusExp(localizer.getPose());
 
             if (
-                    (
-                            t >= timeTrajectory.duration
-//                            || error.position.norm() < 2
+                    t >= timeTrajectory.duration
+                    || (
+                            error.position.norm() < 2
+                            && error.heading.toDouble() < Math.toRadians(5)
                     )
-                    || t >= timeTrajectory.duration + 0.5
-//                    || error.position.norm() < 2
             ) {
                 leftFront.setPower(0);
                 leftBack.setPower(0);

@@ -121,7 +121,6 @@ public final class Constants {
         // Shooter velocity control constants
         public static final double BASE = 1.0053;
         public static final double INTERCEPT = 0.271343;
-        public static final double MAX_RPM = 2400;
         public static final double VELOCITY_TOLERANCE = 20;
 
         // Feedforward gains

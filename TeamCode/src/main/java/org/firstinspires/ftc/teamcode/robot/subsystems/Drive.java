@@ -3,11 +3,14 @@ package org.firstinspires.ftc.teamcode.robot.subsystems;
 import com.acmerobotics.roadrunner.*;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.ImuOrientationOnRobot;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Quaternion;
 import org.firstinspires.ftc.teamcode.Roadrunner.Localizer;
 import org.firstinspires.ftc.teamcode.Roadrunner.MecanumDrive;
 import org.firstinspires.ftc.teamcode.robot.Constants;
@@ -28,6 +31,15 @@ public class Drive extends SubsystemBase {
 
     public Drive(HardwareMap hardwareMap) {
         imu = hardwareMap.get(IMU.class, "imu");
+
+        imu.initialize(
+                new IMU.Parameters(
+                        new RevHubOrientationOnRobot(
+                                RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
+                                RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD
+                        )
+                )
+        );
 
         Pose2d startPose = new Pose2d(0, 0, 0);
         if (Constants.BlackBoard.containsKey(Constants.Keys.POSE)) {
