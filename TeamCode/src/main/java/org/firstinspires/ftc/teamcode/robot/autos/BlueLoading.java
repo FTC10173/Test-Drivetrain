@@ -30,6 +30,8 @@ public final class BlueLoading extends LinearOpMode {
                 .moveAndShoot(FEED_TIME, BLUE_FAR)
                 .intakeLoading()
                 .moveAndShoot(FEED_TIME, BLUE_FAR)
+                .intakeLoading()
+                .moveAndShoot(FEED_TIME, BLUE_FAR)
                 .moveToPose(PARK);
 
         waitForStart();

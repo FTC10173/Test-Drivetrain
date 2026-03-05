@@ -23,8 +23,10 @@ public final class ShooterMath {
 
         double distance = translationalPose.getDistance(goal);
 
+        double powerOffset = pose.position.x > 24 ? -0.035 : 0;
+
         if (distance > 0) {
-            return Constants.Shooter.INTERCEPT * Math.pow(Constants.Shooter.BASE, distance);
+            return Constants.Shooter.INTERCEPT * Math.pow(Constants.Shooter.BASE, distance) + powerOffset;
         }
 
         return 0.45;
@@ -46,9 +48,7 @@ public final class ShooterMath {
 
         double error = targetHeading - pose.heading.toDouble();
 
-        error = Math.atan2(Math.sin(error), Math.cos(error));
-
-        return error;
+        return Math.atan2(Math.sin(error), Math.cos(error));
     }
 
     /**
@@ -64,12 +64,6 @@ public final class ShooterMath {
         double turretDegrees = Math.toDegrees(errorRadians);
 
         // Clamp turret to physical turn radius -90 to +90
-        turretDegrees = Math.max(-Constants.Turret.RANGE, Math.min(Constants.Turret.RANGE, turretDegrees));
-
-        // Convert turret degrees to servo degrees using gear ratio
-        double servoDegrees = turretDegrees / Constants.Turret.GEAR_RATIO;
-
-        // Centered at 900
-        return (Constants.Turret.RANGE_MAX_ANGLE / 2.0) + servoDegrees;
+        return Math.max(-Constants.Turret.RANGE, Math.min(Constants.Turret.RANGE, turretDegrees));
     }
 }

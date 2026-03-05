@@ -21,6 +21,7 @@ public final class GateTest extends LinearOpMode {
         Pose2d PARK = Constants.ParkingPoses.BLUE_CLOSE;
 
         double FEED_TIME = Constants.Intake.FEED_TIME_SEC;
+        double GATE_TIME = Constants.Intake.GATE_TIME_SEC;
 
         AutoBuilder autoBuilder = new AutoBuilder(
                 hardwareMap,
@@ -30,17 +31,11 @@ public final class GateTest extends LinearOpMode {
         )
                 .moveAndShoot(FEED_TIME, BLUE_CLOSE)
                 .alignWithArtifacts(22)
-                .straightIntake(true)
-                .moveAndShoot(FEED_TIME, BLUE_CLOSE_BACK)
-                .moveToPose(new Pose2d(12, -24, Math.toRadians(270)))
-                .intakeGate(INTAKE_GATE, FEED_TIME)
-                .moveToPose(new Pose2d(12, -24, Math.toRadians(270)))
-                .moveAndShoot(FEED_TIME, BLUE_CLOSE_BACK)
-                .alignWithArtifacts()
                 .straightIntake()
                 .moveAndShoot(FEED_TIME, BLUE_CLOSE_BACK)
-                .alignWithArtifacts()
-                .straightIntake()
+                .intakeGate(INTAKE_GATE, GATE_TIME)
+                .moveAndShoot(FEED_TIME, BLUE_CLOSE_BACK)
+                .intakeGate(INTAKE_GATE, GATE_TIME)
                 .moveAndShoot(FEED_TIME, BLUE_CLOSE_BACK)
                 .moveToPose(PARK);
 

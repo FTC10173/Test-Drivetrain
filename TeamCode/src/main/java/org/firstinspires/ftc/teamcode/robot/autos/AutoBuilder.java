@@ -18,6 +18,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.Roadrunner.MecanumDrive;
 import org.firstinspires.ftc.teamcode.robot.Constants;
+import org.firstinspires.ftc.teamcode.robot.subsystems.Gate;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.robot.subsystems.LED;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Limelight;
@@ -67,6 +68,7 @@ public class AutoBuilder {
     private final MecanumDrive drive;
     private final Shooter shooter;
     private final Intake intake;
+    private final Gate gate;
     private final LED led;
     private final Limelight limelight;
     private final Turret turret;
@@ -89,6 +91,7 @@ public class AutoBuilder {
         this.drive = robot.getDrive().drive;
         this.shooter = robot.getShooter();
         this.intake = robot.getIntake();
+        this.gate = robot.getGate();
         this.led = robot.getLed();
         this.limelight = robot.getLimelight();
         this.turret = robot.getTurret();
@@ -126,7 +129,7 @@ public class AutoBuilder {
                             robot.setPower(targetPose),
                             turret.goTo(targetPose, alliance),
                             shooter.startShooter(),
-                            intake.open()
+                            gate.openAction()
                     );
                 }
 
@@ -150,6 +153,8 @@ public class AutoBuilder {
         double y = (alliance == Constants.Alliance.BLUE) ? -55 : 55;
 
         actions.add(intake.intake(1));
+
+        actions.add(gate.closeAction());
 
         actions.add(new Action() {
 
@@ -175,7 +180,7 @@ public class AutoBuilder {
             }
         });
 
-        actions.add(intake.intake(0));
+        actions.add(intake.intake(1, 0.25));
 
         return this;
     }
@@ -184,6 +189,8 @@ public class AutoBuilder {
         double y = (alliance == Constants.Alliance.BLUE) ? -55 : 55;
 
         actions.add(intake.intake(1));
+
+        actions.add(gate.closeAction());
 
         actions.add(new Action() {
 
@@ -223,7 +230,7 @@ public class AutoBuilder {
             }
         });
 
-        actions.add(intake.intake(0));
+        actions.add(intake.intake(1, 0.25));
 
         return this;
     }
@@ -262,32 +269,20 @@ public class AutoBuilder {
     }
 
     public AutoBuilder intakeGate(Pose2d gatePose, double intakeTime) {
+        double heading = (alliance == Constants.Alliance.BLUE) ? 270 : 90;
+        double offsetY = (alliance == Constants.Alliance.BLUE) ? 24 : -24;
+
+        moveToPose(new Pose2d(gatePose.position.x, gatePose.position.y + offsetY, Math.toRadians(heading)));
+
         actions.add(intake.intake(1));
 
-        double offsetY = (alliance == Constants.Alliance.BLUE) ? 6 : -6;
+        actions.add(gate.closeAction());
 
-        actions.add(new Action() {
-            private Action inner = null;
-
-            @Override
-            public boolean run(@NonNull TelemetryPacket packet) {
-
-                // Build ONCE
-                if (inner == null) {
-
-                    Pose2d currentPose = drive.localizer.getPose();
-
-                    inner = drive.actionBuilder(currentPose)
-                            .strafeToLinearHeading(new Vector2d(gatePose.position.x, gatePose.position.y + offsetY), Math.toRadians(gatePose.heading.toDouble()))
-                            .strafeToLinearHeading(new Vector2d(gatePose.position.x, gatePose.position.y), Math.toRadians(gatePose.heading.toDouble()))
-                            .build();
-                }
-
-                return inner.run(packet);
-            }
-        });
+        moveToPose(gatePose);
 
         actions.add(intake.intake(1, intakeTime));
+
+        moveToPose(new Pose2d(gatePose.position.x, gatePose.position.y + offsetY, Math.toRadians(heading)));
 
         return this;
     }
@@ -457,6 +452,8 @@ public class AutoBuilder {
         });
 
         actions.add(intake.intake(1));
+
+        actions.add(gate.closeAction());
 
         actions.add(new Action() {
             private Action inner = null;

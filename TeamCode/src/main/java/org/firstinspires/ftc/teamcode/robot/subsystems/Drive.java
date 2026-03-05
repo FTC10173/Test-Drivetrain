@@ -15,6 +15,7 @@ import org.firstinspires.ftc.teamcode.Roadrunner.Localizer;
 import org.firstinspires.ftc.teamcode.Roadrunner.MecanumDrive;
 import org.firstinspires.ftc.teamcode.robot.Constants;
 import org.firstinspires.ftc.teamcode.robot.Logger;
+import org.firstinspires.ftc.teamcode.robot.PoseEstimator;
 
 import java.lang.Math;
 
@@ -47,6 +48,7 @@ public class Drive extends SubsystemBase {
         }
 
         drive = new MecanumDrive(hardwareMap, startPose);
+        drive.localizer = new PoseEstimator(hardwareMap, MecanumDrive.PARAMS.inPerTick, startPose);
 
         // Configure PID controller for turing robot
         headingPID = new PIDController(
@@ -111,7 +113,7 @@ public class Drive extends SubsystemBase {
     public double getHeadingCorrected(Constants.Alliance alliance) {
         double heading = getHeadingRadians();
 
-        double correction = alliance == Constants.Alliance.BLUE ? Math.PI / 2 : -(Math.PI / 2);
+        double correction = alliance == Constants.Alliance.BLUE ? -(Math.PI / 2) : Math.PI / 2;
 
         return heading + correction;
     }

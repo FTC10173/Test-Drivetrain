@@ -32,6 +32,8 @@ public final class RedLoading extends LinearOpMode {
                 .moveAndShoot(FEED_TIME, RED_FAR)
                 .intakeLoading()
                 .moveAndShoot(FEED_TIME, RED_FAR)
+                .intakeLoading()
+                .moveAndShoot(FEED_TIME, RED_FAR)
                 .moveToPose(PARK);
 
         waitForStart();

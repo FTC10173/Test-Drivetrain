@@ -113,7 +113,7 @@ public final class MecanumDrive {
 
     public final LazyImu lazyImu;
 
-    public final Localizer localizer;
+    public Localizer localizer;
     private final LinkedList<Pose2d> poseHistory = new LinkedList<>();
 
     private final DownsampledWriter estimatedPoseWriter = new DownsampledWriter("ESTIMATED_POSE", 50_000_000);
@@ -305,11 +305,11 @@ public final class MecanumDrive {
             Pose2d error = txWorldTarget.value().minusExp(localizer.getPose());
 
             if (
-                    t >= timeTrajectory.duration
-                    || (
-                            error.position.norm() < 2
-                            && error.heading.toDouble() < Math.toRadians(5)
-                    )
+                    t >= (timeTrajectory.duration - 0.25)
+//                    || (
+//                            error.position.norm() < 2
+//                            && error.heading.toDouble() < Math.toRadians(5)
+//                    )
             ) {
                 leftFront.setPower(0);
                 leftBack.setPower(0);

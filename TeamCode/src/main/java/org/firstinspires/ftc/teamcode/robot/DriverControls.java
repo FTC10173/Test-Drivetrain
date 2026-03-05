@@ -8,44 +8,34 @@ public class DriverControls {
 
     // Buttons
     public final GamepadButton shootButton; // Left Bumper for shooting
-    public final GamepadButton intakeButton; // Right Bumper for full intake
+    public final GamepadButton feedButton; // Right Bumper for full intake
     public final GamepadButton yawResetButton; // Back button for yaw reset
     public final GamepadButton lockTurretButton; // Y button to lock turret
-
-    public final GamepadButton upTest;
-    public final GamepadButton downTest;
 
     // Triggers
     public final Trigger shootTrigger;
     public final Trigger intakeTrigger;
+    public final Trigger feedTrigger;
     public final Trigger outtakeTrigger;
     public final Trigger yawResetTrigger;
     public final Trigger lockTurretTrigger;
-
-    public final Trigger upTrigger;
-    public final Trigger downTrigger;
 
     public DriverControls(GamepadEx driver) {
         this.driver = driver;
 
         // Initialize buttons
         shootButton = driver.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER);
-        intakeButton = driver.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER);
+        feedButton = driver.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER);
         yawResetButton = driver.getGamepadButton(GamepadKeys.Button.BACK);
         lockTurretButton = driver.getGamepadButton(GamepadKeys.Button.Y);
 
-        upTest = driver.getGamepadButton(GamepadKeys.Button.DPAD_UP);
-        downTest = driver.getGamepadButton(GamepadKeys.Button.DPAD_DOWN);
-
         // Create triggers
         shootTrigger = new Trigger(shootButton::get);
-        intakeTrigger = new Trigger(intakeButton::get);
+        intakeTrigger = new Trigger(this::intakeTrigger);
+        feedTrigger = new Trigger(feedButton::get);
         outtakeTrigger = new Trigger(this::outtakeTrigger);
         yawResetTrigger = new Trigger(yawResetButton::get);
         lockTurretTrigger = new Trigger(lockTurretButton::get);
-
-        upTrigger = new Trigger(upTest::get);
-        downTrigger = new Trigger(downTest::get);
     }
 
     public double getRightTrigger() {
@@ -58,6 +48,10 @@ public class DriverControls {
 
     public boolean outtakeTrigger() {
         return getRightTrigger() > 0.1 && getLeftTrigger() > 0.1;
+    }
+
+    public boolean intakeTrigger() {
+        return getRightTrigger() > 0.1;
     }
 
     public void readButtons() {

@@ -80,7 +80,7 @@ public class Shooter extends SubsystemBase {
 
     public void setPower(double power) {
         this.targetPower = power;
-        this.targetVelocity = flywheel.ACHIEVABLE_MAX_TICKS_PER_SECOND * power;
+        this.targetVelocity = Constants.Shooter.MAX_RPM * power;
     }
 
     public void startFlywheel() {

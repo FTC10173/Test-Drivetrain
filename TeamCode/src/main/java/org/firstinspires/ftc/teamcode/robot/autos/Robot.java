@@ -24,6 +24,7 @@ public class Robot {
     private final Shooter shooter;
     private final Turret turret;
     private final Intake intake;
+    private final Gate gate;
     private final LED led;
     private final Limelight limelight;
 
@@ -43,6 +44,7 @@ public class Robot {
         limelight = new Limelight(hardwareMap);
         shooter = new Shooter(hardwareMap);
         intake = new Intake(hardwareMap);
+        gate = new Gate(hardwareMap);
         led = new LED(hardwareMap);
         drive = new Drive(hardwareMap);
         turret = new Turret(hardwareMap);
@@ -89,6 +91,7 @@ public class Robot {
     public Drive getDrive() { return drive; }
     public Shooter getShooter() { return shooter; }
     public Intake getIntake() { return intake; }
+    public Gate getGate() { return gate; }
     public LED getLed() { return led; }
     public Limelight getLimelight() { return limelight; }
     public Turret getTurret() { return turret; }
@@ -103,15 +106,6 @@ public class Robot {
 
                 if (result != null && result.isValid()) {
                     poseEstimator.addLimelight(result);
-
-                    List<LLResultTypes.FiducialResult> fiducials = result.getFiducialResults();
-                    for (LLResultTypes.FiducialResult fiducial : fiducials) {
-                        int id = fiducial.getFiducialId();
-                        if (id == Constants.Tags.getID(alliance)) {
-                            turret.addOffset(fiducial.getTargetXDegrees());
-                            break;
-                        }
-                    }
                 }
 
                 return true;

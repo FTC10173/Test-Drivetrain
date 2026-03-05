@@ -72,7 +72,7 @@ public final class ThreeDeadWheelLocalizer implements Localizer {
     public Pose2d getPose() {
         if (result != null) {
             if (result.getStaleness() <= 20) {
-                Pose3D botpose = result.getBotpose();
+                Pose3D botpose = result.getBotpose_MT2();
 
                 Translation2d llPose = new Translation2d(
                         botpose.getPosition().x * 39.37,

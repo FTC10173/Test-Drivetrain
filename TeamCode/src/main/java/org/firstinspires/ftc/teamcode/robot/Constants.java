@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.robot;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.Vector2d;
 import com.arcrobotics.ftclib.geometry.Translation2d;
 import java.util.HashMap;
 
@@ -27,9 +28,9 @@ public final class Constants {
     
     public static class ShootingPoses {
         public static final Pose2d BLUE_CLOSE = new Pose2d(-18, -18, Math.toRadians(225)); // 46.86149806
-        public static Pose2d BLUE_CLOSE_BACK = new Pose2d(-18, -18, Math.toRadians(270));
+        public static Pose2d BLUE_CLOSE_BACK = new Pose2d(-18, -18, Math.toRadians(-45));
         public static final Pose2d RED_CLOSE = new Pose2d(-18, 18, Math.toRadians(135)); // 0.001368206908*46.86149806
-        public static Pose2d RED_CLOSE_BACK = new Pose2d(-18, 18, Math.toRadians(90));
+        public static Pose2d RED_CLOSE_BACK = new Pose2d(-18, 18, Math.toRadians(45));
         public static final Pose2d BLUE_FAR = new Pose2d(54, -16, Math.toRadians(203.5)); // 112.6410227
         public static final Pose2d RED_FAR = new Pose2d(54, 16, Math.toRadians(156.5)); // 112.6410227
     }
@@ -46,11 +47,11 @@ public final class Constants {
         public static Translation2d getTurretGoal(Alliance alliance) {
             if (alliance == Alliance.BLUE) {
                 return new Translation2d(
-                        BLUE.getX() + 5, BLUE.getY() + 5
+                        BLUE.getX() + 12, BLUE.getY() + 12
                 );
             } else {
                 return new Translation2d(
-                        RED.getX() + 5, RED.getY() - 5
+                        RED.getX() + 12, RED.getY() - 12
                 );
             }
         }
@@ -72,8 +73,8 @@ public final class Constants {
 
     
     public static class ParkingPoses {
-        public static final Pose2d BLUE_CLOSE = new Pose2d(-60, -12, Math.toRadians(270));
-        public static final Pose2d RED_CLOSE = new Pose2d(-60, 12, Math.toRadians(90));
+        public static final Pose2d BLUE_CLOSE = new Pose2d(-24, -48, Math.toRadians(270));
+        public static final Pose2d RED_CLOSE = new Pose2d(-24, 48, Math.toRadians(90));
         public static final Pose2d BLUE_FAR = new Pose2d(60, -36, Math.toRadians(270));
         public static final Pose2d RED_FAR = new Pose2d(60, 36, Math.toRadians(90));
     }
@@ -81,9 +82,9 @@ public final class Constants {
     
     public static class GatePoses {
         public static final Pose2d BLUE_OPEN = new Pose2d(0, -54, Math.toRadians(270));
-        public static final Pose2d BLUE_INTAKE = new Pose2d(6, -60, Math.toRadians(225));
+        public static final Pose2d BLUE_INTAKE = new Pose2d(11, -66, Math.toRadians(220));
         public static final Pose2d RED_OPEN = new Pose2d(0, 54, Math.toRadians(90));
-        public static final Pose2d RED_INTAKE = new Pose2d(6, 60, Math.toRadians(135));
+        public static final Pose2d RED_INTAKE = new Pose2d(11, 66, Math.toRadians(140));
 
     }
 
@@ -113,15 +114,16 @@ public final class Constants {
         public static final double RANGE_MIN_ANGLE = 0;
         public static final double RANGE_MAX_ANGLE = 1800;
         public static final double RANGE = 90;
-        public static final double GEAR_RATIO = (double) 50/135;
+        public static final double GEAR_RATIO = (double) 50/150;
     }
 
     
     public static class Shooter {
         // Shooter velocity control constants
-        public static final double BASE = 1.0053;
-        public static final double INTERCEPT = 0.271343;
-        public static final double VELOCITY_TOLERANCE = 20;
+        public static final double BASE = 1.0054;
+        public static final double INTERCEPT = 0.258343;
+        public static final double VELOCITY_TOLERANCE = 10;
+        public static final double MAX_RPM = 2800;
 
         // Feedforward gains
         public static final double kP = 5.0;
@@ -134,7 +136,8 @@ public final class Constants {
 
     
     public static class Intake {
-        public static final double FEED_TIME_SEC = 1.3;
+        public static final double FEED_TIME_SEC = 1.25;
+        public static final double GATE_TIME_SEC = 1.25;
     }
 
     

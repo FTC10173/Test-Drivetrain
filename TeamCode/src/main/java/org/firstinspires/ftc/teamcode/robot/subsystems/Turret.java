@@ -20,8 +20,9 @@ public class Turret extends SubsystemBase {
     private final ServoEx turret0;
     private final ServoEx turret1;
     private double targetAngle = Constants.Turret.RANGE_MAX_ANGLE / 2;
-    private double offset = 0;
     private boolean locked = false;
+    private double turretDegrees = 0;
+
     public Turret(HardwareMap hardwareMap) {
         turret0 = new SimpleServo(
                 hardwareMap, "leftTurret",
@@ -46,9 +47,13 @@ public class Turret extends SubsystemBase {
         turret1.turnToAngle(targetAngle);
     }
 
-    public void set(double servoTarget) {
+    public void set(double turretTarget) {
         if (!locked) {
-            servoTarget += (offset / Constants.Turret.GEAR_RATIO);
+            turretDegrees = turretTarget;
+
+            double servoDegrees = turretTarget / Constants.Turret.GEAR_RATIO;
+
+            double servoTarget = (Constants.Turret.RANGE_MAX_ANGLE / 2.0) + servoDegrees;
 
             double center = Constants.Turret.RANGE_MAX_ANGLE / 2.0;
 
@@ -60,11 +65,17 @@ public class Turret extends SubsystemBase {
             servoTarget = Math.max(min, Math.min(max, servoTarget));
 
             this.targetAngle = servoTarget;
+        } else {
+            turretDegrees = 0;
         }
     }
 
-    public void autoSet(double servoTarget) {
-        servoTarget += (offset / Constants.Turret.GEAR_RATIO);
+    public void autoSet(double turretTarget) {
+        turretDegrees = turretTarget;
+
+        double servoDegrees = turretTarget / Constants.Turret.GEAR_RATIO;
+
+        double servoTarget = (Constants.Turret.RANGE_MAX_ANGLE / 2.0) + servoDegrees;
 
         double center = Constants.Turret.RANGE_MAX_ANGLE / 2.0;
 
@@ -86,6 +97,7 @@ public class Turret extends SubsystemBase {
     public void updateTelemetry(Telemetry telemetry, Logger logger) {
         telemetry.addData(getName() + " Healthy", isHealthy());
         telemetry.addData(getName() + " targetAngle", targetAngle);
+        telemetry.addData(getName() + " turretDegrees", turretDegrees);
 
         if (logger != null) {
             logger.put(getName() + " Healthy", isHealthy());
@@ -108,8 +120,8 @@ public class Turret extends SubsystemBase {
         );
     }
 
-    public void addOffset(double offset) {
-        this.offset += offset;
+    public double getTurretDegrees() {
+        return turretDegrees;
     }
 
     public void lockTurret() {

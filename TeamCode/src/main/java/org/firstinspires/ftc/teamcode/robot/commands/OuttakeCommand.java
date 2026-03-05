@@ -5,18 +5,21 @@ import com.arcrobotics.ftclib.command.CommandBase;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Gate;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Intake;
 
-public class IntakeCommand extends CommandBase {
+public class OuttakeCommand extends CommandBase {
     private final Intake intake;
+    private final Gate gate;
 
-    public IntakeCommand(Intake intake) {
+    public OuttakeCommand(Intake intake, Gate gate) {
         this.intake = intake;
+        this.gate = gate;
 
-        addRequirements(intake);
+        addRequirements(intake, gate);
     }
 
     @Override
     public void execute() {
-        intake.intake();
+        intake.outtake();
+        gate.open();
     }
 
     @Override

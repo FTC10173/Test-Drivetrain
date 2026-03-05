@@ -14,6 +14,7 @@ public final class RedClose extends LinearOpMode {
 
         Pose2d startPose = Constants.StartingPoses.RED_CLOSE;
         Pose2d RED_CLOSE = Constants.ShootingPoses.RED_CLOSE;
+        Pose2d RED_CLOSE_BACK = Constants.ShootingPoses.RED_CLOSE_BACK;
         Pose2d PARK = Constants.ParkingPoses.RED_CLOSE;
 
         double FEED_TIME = Constants.Intake.FEED_TIME_SEC;
@@ -27,10 +28,10 @@ public final class RedClose extends LinearOpMode {
                 .moveAndShoot(FEED_TIME, RED_CLOSE)
                 .alignWithArtifacts()
                 .straightIntake()
-                .moveAndShoot(FEED_TIME, RED_CLOSE)
+                .moveAndShoot(FEED_TIME, RED_CLOSE_BACK)
                 .alignWithArtifacts()
                 .straightIntake()
-                .moveAndShoot(FEED_TIME, RED_CLOSE)
+                .moveAndShoot(FEED_TIME, RED_CLOSE_BACK)
                 .moveToPose(PARK);
 
         waitForStart();

@@ -9,20 +9,20 @@ import com.qualcomm.robotcore.hardware.IMU;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
+import org.firstinspires.ftc.teamcode.robot.Constants;
 import org.firstinspires.ftc.teamcode.robot.Logger;
 
 import java.util.List;
 
 public class Limelight extends SubsystemBase {
     private final Limelight3A limelight;
-    private final IMU imu;
+    private double heading = 0;
 
     private int pipelineIndex = 0;
     private LLResult result;
 
     public Limelight(HardwareMap hardwareMap) {
         this.limelight = hardwareMap.get(Limelight3A.class, "limelight");
-        this.imu = hardwareMap.get(IMU.class, "imu");
 
         limelight.setPollRateHz(100);
         limelight.start();
@@ -33,8 +33,7 @@ public class Limelight extends SubsystemBase {
     public void periodic() {
         // update robotYaw for MT2
         // TODO: Meta Tag 2 is not being used currently because yaw is not configured correctly
-        double robotYaw = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
-        limelight.updateRobotOrientation(robotYaw);
+        limelight.updateRobotOrientation(heading);
 
         LLResult result = limelight.getLatestResult();
 
@@ -47,6 +46,10 @@ public class Limelight extends SubsystemBase {
         }
 
         this.result = result;
+    }
+
+    public void updateHeading(double heading, double turretSupplier) {
+        this.heading = Math.toDegrees(heading) + turretSupplier;
     }
 
     public void setPipeline(int index) {
@@ -72,9 +75,10 @@ public class Limelight extends SubsystemBase {
 
     public void updateTelemetry(Telemetry telemetry, Logger logger) {
         telemetry.addData(getName() + " Healthy", isHealthy());
+        telemetry.addData(getName() + " Heading", heading);
 
         if (result != null && result.isValid()) {
-            Pose3D botpose = result.getBotpose();
+            Pose3D botpose = result.getBotpose_MT2();
 
             telemetry.addData(getName() + " X", botpose.getPosition().x * 39.37);
             telemetry.addData(getName() + " Y", botpose.getPosition().y * 39.37);

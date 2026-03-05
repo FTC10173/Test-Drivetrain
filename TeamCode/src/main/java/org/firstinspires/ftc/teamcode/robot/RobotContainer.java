@@ -20,6 +20,7 @@ public class RobotContainer {
     private final Drive drive;
     private final Shooter shooter;
     private final Intake intake;
+    private final Gate gate;
     private final LED led;
     private final Limelight limelight;
     private final Turret turret;
@@ -38,6 +39,7 @@ public class RobotContainer {
         limelight = new Limelight(hardwareMap);
         shooter = new Shooter(hardwareMap);
         intake = new Intake(hardwareMap);
+        gate = new Gate(hardwareMap);
         led = new LED(hardwareMap);
         drive = new Drive(hardwareMap);
         turret = new Turret(hardwareMap);
@@ -62,18 +64,22 @@ public class RobotContainer {
     private void configureBindings() {
         // Shoot command - Left Bumper
         controls.shootTrigger
-                .whileActiveOnce(
-                new ShootCommand(shooter, intake, drive::getPose, alliance, ShooterMath::getShooterPower)
+                .toggleWhenActive(
+                new ShootCommand(shooter, drive::getPose, alliance, ShooterMath::getShooterPower)
+        );
+
+        controls.feedTrigger.whileActiveOnce(
+                new FeedCommand(intake, gate)
         );
 
         // Half Intake - Right Trigger
         controls.intakeTrigger.whileActiveOnce(
-                new IntakeCommand(intake, () -> 1.0, () -> false)
+                new IntakeCommand(intake)
         );
 
         // Outtake - Left Trigger
         controls.outtakeTrigger.whileActiveOnce(
-                new IntakeCommand(intake, () -> -1.0, () -> false)
+                new OuttakeCommand(intake, gate)
         );
 
         // Yaw Reset - Back button
@@ -84,14 +90,6 @@ public class RobotContainer {
         controls.lockTurretTrigger.whileActiveOnce(
                 new LockTurretCommand(turret)
         );
-
-        controls.upTrigger.whileActiveOnce(
-                new Test(shooter, () -> true)
-        );
-
-        controls.downTrigger.whileActiveOnce(
-                new Test(shooter, () -> false)
-        );
     }
 
     private void registerDefaultCommands() {
@@ -99,7 +97,8 @@ public class RobotContainer {
         drive.setDefaultCommand(
                 new DefaultDrive(
                         drive,
-                        this::getDriveInputs
+                        this::getDriveInputs,
+                        alliance
                 )
         );
 
@@ -110,13 +109,18 @@ public class RobotContainer {
                 )
         );
 
+        gate.setDefaultCommand(
+                new DefaultGate(gate)
+        );
+
         // Set default limelight command - updating localization
         limelight.setDefaultCommand(
                 new DefaultLimelight(
                         limelight,
                         drive.getLocalizer(),
                         alliance,
-                        turret::addOffset
+                        drive::getHeadingCorrected,
+                        turret::getTurretDegrees
                 )
         );
 
@@ -178,6 +182,7 @@ public class RobotContainer {
         drive.updateTelemetry(telemetry, logger);
         shooter.updateTelemetry(telemetry, logger);
         intake.updateTelemetry(telemetry, logger);
+        gate.updateTelemetry(telemetry, logger);
         led.updateTelemetry(telemetry, logger);
         limelight.updateTelemetry(telemetry, logger);
         turret.updateTelemetry(telemetry, logger);

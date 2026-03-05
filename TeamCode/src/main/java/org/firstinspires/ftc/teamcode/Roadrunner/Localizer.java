@@ -32,5 +32,9 @@ public interface Localizer {
 
     default void addLimelight(LLResult result) {
 
-    };
+    }
+
+    default void updateHeading(double newHeading) {
+
+    }
 }

@@ -17,7 +17,7 @@ public class MeepMeepTesting {
 
         myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(64, -16, Math.toRadians(180)))
                 .strafeToLinearHeading(new Vector2d(52, -16), Math.toRadians(204))
-                .strafeToLinearHeading(new Vector2d(36, -18), Math.toRadians(270))
+                .strafeToLinearHeading(new Vector2d(8, -60), Math.toRadians(225))
                 .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_DECODE_OFFICIAL)
