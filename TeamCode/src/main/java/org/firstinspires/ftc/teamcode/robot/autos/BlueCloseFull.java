@@ -6,7 +6,7 @@ import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 
-public static class BlueCloseFull {
+public class BlueCloseFull {
     public PathChain shootPreload;
     public PathChain intake1;
     public PathChain shootIntake1;
