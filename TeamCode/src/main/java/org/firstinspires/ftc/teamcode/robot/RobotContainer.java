@@ -15,7 +15,6 @@ import org.firstinspires.ftc.teamcode.robot.subsystems.*;
 public class RobotContainer {
     // Utility
     private final Telemetry telemetry;
-    private final Logger logger;
 
     // Subsystems
     private final Drive drive;
@@ -31,7 +30,6 @@ public class RobotContainer {
 
     public RobotContainer(HardwareMap hardwareMap, GamepadEx driverGamepad, Telemetry telemetry) {
         this.telemetry = telemetry;
-        this.logger = new Logger("TeleOp_" + System.currentTimeMillis());
 
         // Initialize subsystems
         limelight = new Limelight(hardwareMap);
@@ -109,7 +107,7 @@ public class RobotContainer {
         limelight.setDefaultCommand(
                 new DefaultLimelight(
                         limelight,
-                        drive.getLocalizer()
+                        drive.getLocalizer(),
                         drive::getHeadingCorrected,
                         turret::getTurretDegrees
                 )
@@ -172,13 +170,13 @@ public class RobotContainer {
      * call telemetry updates
      */
     private void updateTelemetry() {
-        drive.updateTelemetry(telemetry, logger);
-        shooter.updateTelemetry(telemetry, logger);
-        intake.updateTelemetry(telemetry, logger);
-        gate.updateTelemetry(telemetry, logger);
-        led.updateTelemetry(telemetry, logger);
-        limelight.updateTelemetry(telemetry, logger);
-        turret.updateTelemetry(telemetry, logger);
+        drive.updateTelemetry(telemetry);
+        shooter.updateTelemetry(telemetry);
+        intake.updateTelemetry(telemetry);
+        gate.updateTelemetry(telemetry);
+        led.updateTelemetry(telemetry);
+        limelight.updateTelemetry(telemetry);
+        turret.updateTelemetry(telemetry);
 
         telemetry.update();
     }
@@ -195,8 +193,6 @@ public class RobotContainer {
         led.stop();
         limelight.stop();
         turret.stop();
-
-        logger.save();
     }
 
     // Getters for subsystems
@@ -205,7 +201,6 @@ public class RobotContainer {
     public Intake getIntake() { return intake; }
     public LED getLed() { return led; }
     public Limelight getLimelight() { return limelight; }
-    public Logger getLogger() { return logger; }
 
     public static class DriverInputs {
         public double LeftY;

@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.robot.commands;
 
+import com.pedropathing.geometry.Pose;
 import com.seattlesolvers.solverslib.command.CommandBase;
+import com.seattlesolvers.solverslib.geometry.Pose2d;
 
 import org.firstinspires.ftc.teamcode.robot.subsystems.Turret;
 
@@ -10,14 +12,14 @@ import java.util.function.Supplier;
 
 public class DefaultTurret extends CommandBase {
     private final Turret turret;
-    private final Supplier<Pose2d> poseSupplier;
+    private final Supplier<Pose> poseSupplier;
     private final DoubleSupplier headingSupplier;
-    private final Function<Pose2d, Double> targetSupplier;
+    private final Function<Pose, Double> targetSupplier;
 
     public DefaultTurret(
             Turret turret,
-            Function<Pose2d, Double> targetSupplier,
-            Supplier<Pose2d> poseSupplier,
+            Function<Pose, Double> targetSupplier,
+            Supplier<Pose> poseSupplier,
             DoubleSupplier headingSupplier
     ) {
         this.turret = turret;
@@ -30,12 +32,12 @@ public class DefaultTurret extends CommandBase {
 
     @Override
     public void execute() {
-        Pose2d pose = poseSupplier.get();
+        Pose pose = poseSupplier.get();
         double correctedHeading = headingSupplier.getAsDouble();
 
         double targetHeading = targetSupplier.apply(
-                new Pose2d(
-                        pose.position.x, pose.position.y, correctedHeading
+                new Pose(
+                        pose.getX(), pose.getY(), correctedHeading
                 )
         );
 

@@ -15,8 +15,6 @@ public class DefaultDrive extends CommandBase {
         this.drive = drive;
         this.driveSupplier = driveSupplier;
 
-        drive.setHeadingLock(false, 0);
-
         addRequirements(drive);
     }
 
@@ -28,10 +26,6 @@ public class DefaultDrive extends CommandBase {
                 driveInputs.LeftY,
                 driveInputs.LeftX,
                 driveInputs.RightX
-        );
-
-        drive.getLocalizer().updateHeading(
-                drive.getHeadingCorrected()
         );
 
         drive.updateGoalHeadingError(drive.getPose());

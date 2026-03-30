@@ -3,17 +3,11 @@ package org.firstinspires.ftc.teamcode.robot.subsystems;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.IMU;
 
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
-import org.firstinspires.ftc.teamcode.robot.Constants;
-import org.firstinspires.ftc.teamcode.robot.Logger;
-
-import java.util.List;
 
 public class Limelight extends SubsystemBase {
     private final Limelight3A limelight;
@@ -74,7 +68,7 @@ public class Limelight extends SubsystemBase {
         limelight.shutdown();
     }
 
-    public void updateTelemetry(Telemetry telemetry, Logger logger) {
+    public void updateTelemetry(Telemetry telemetry) {
         telemetry.addData(getName() + " Healthy", isHealthy());
         telemetry.addData(getName() + " Heading", heading);
 
@@ -83,10 +77,6 @@ public class Limelight extends SubsystemBase {
 
             telemetry.addData(getName() + " X", botpose.getPosition().x * 39.37);
             telemetry.addData(getName() + " Y", botpose.getPosition().y * 39.37);
-        }
-
-        if (logger != null) {
-            logger.put(getName() + " Healthy", isHealthy());
         }
     }
 }

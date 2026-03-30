@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.robot.commands;
 
+import com.pedropathing.geometry.Pose;
 import com.seattlesolvers.solverslib.command.CommandBase;
 
 import org.firstinspires.ftc.teamcode.robot.subsystems.Shooter;
@@ -9,13 +10,13 @@ import java.util.function.Supplier;
 
 public class ShootCommand extends CommandBase {
     private final Shooter shooter;
-    private final Supplier<Pose2d> poseSupplier;
-    private final Function<Pose2d, Double> powerSupplier;
+    private final Supplier<Pose> poseSupplier;
+    private final Function<Pose, Double> powerSupplier;
 
     public ShootCommand(
             Shooter shooter,
-            Supplier<Pose2d> poseSupplier,
-            Function<Pose2d, Double> powerSupplier
+            Supplier<Pose> poseSupplier,
+            Function<Pose, Double> powerSupplier
     ) {
         this.shooter = shooter;
         this.poseSupplier = poseSupplier;

@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.robot.commands;
 
+import com.pedropathing.geometry.Pose;
 import com.seattlesolvers.solverslib.command.CommandBase;
+import com.seattlesolvers.solverslib.geometry.Pose2d;
 
 import org.firstinspires.ftc.teamcode.robot.subsystems.Gate;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Intake;
@@ -10,9 +12,9 @@ import java.util.function.Supplier;
 public class FeedCommand extends CommandBase {
     private final Intake intake;
     private final Gate gate;
-    private final Supplier<Pose2d> poseSupplier;
+    private final Supplier<Pose> poseSupplier;
 
-    public FeedCommand(Intake intake, Gate gate, Supplier<Pose2d> poseSupplier) {
+    public FeedCommand(Intake intake, Gate gate, Supplier<Pose> poseSupplier) {
         this.intake = intake;
         this.gate = gate;
         this.poseSupplier = poseSupplier;
@@ -22,9 +24,9 @@ public class FeedCommand extends CommandBase {
 
     @Override
     public void execute() {
-        Pose2d pose = poseSupplier.get();
+        Pose pose = poseSupplier.get();
 
-        if (pose.position.x > 24) {
+        if (pose.getX() > 24) {
             intake.farFeed();
         }
         else {

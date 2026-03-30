@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.robot;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 
 @TeleOp(name="Robot", group="2025-2026")
 public class Main extends LinearOpMode {
@@ -18,9 +18,5 @@ public class Main extends LinearOpMode {
             // call central loop
             robotContainer.periodic();
         }
-
-        // Causing slowed stops and unnecessary restarts
-//        robotContainer.getLogger().save();
-//        CommandScheduler.getInstance().reset();
     }
 }

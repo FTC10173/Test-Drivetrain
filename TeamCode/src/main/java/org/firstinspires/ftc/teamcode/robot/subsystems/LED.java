@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.robot.subsystems;
 
-import com.acmerobotics.roadrunner.*;
+
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -13,7 +13,6 @@ import static org.firstinspires.ftc.teamcode.Prism.Color.*;
 import androidx.annotation.NonNull;
 
 import org.firstinspires.ftc.teamcode.Prism.PrismAnimations;
-import org.firstinspires.ftc.teamcode.robot.Logger;
 
 public class LED extends SubsystemBase {
     private final GoBildaPrismDriver prism;
@@ -73,14 +72,9 @@ public class LED extends SubsystemBase {
         prism.updateAllAnimations();
     }
 
-    public void updateTelemetry(Telemetry telemetry, Logger logger) {
+    public void updateTelemetry(Telemetry telemetry) {
         telemetry.addData(getName() + " Healthy", isHealthy());
         telemetry.addData(getName() + " State", currentState);
-
-        if (logger != null) {
-            logger.put(getName() + " Healthy", isHealthy());
-            logger.put(getName() + " State", currentState.toString());
-        }
     }
 
     public void set(State state) {
@@ -108,17 +102,5 @@ public class LED extends SubsystemBase {
         PWMColor(double pmw) {
             this.pmw = pmw;
         }
-    }
-
-    // RoadRunner Action for maintaining led updates
-    public Action updateIndicatorAction() {
-        return new Action() {
-            @Override
-            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                updateIndicator();
-
-                return true;
-            }
-        };
     }
 }

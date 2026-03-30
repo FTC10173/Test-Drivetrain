@@ -1,13 +1,12 @@
 package org.firstinspires.ftc.teamcode.robot;
 
-import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.Vector2d;
-import com.arcrobotics.ftclib.geometry.Translation2d;
+import com.seattlesolvers.solverslib.geometry.Pose2d;
+import com.seattlesolvers.solverslib.geometry.Translation2d;
+
 import java.util.HashMap;
 
 
-public final class Constants {
+public final class MyConstants {
     
     public static class Drive {
         // PID constants for heading lock

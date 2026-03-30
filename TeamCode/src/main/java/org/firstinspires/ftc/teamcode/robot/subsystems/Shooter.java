@@ -5,26 +5,28 @@ import androidx.annotation.NonNull;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import com.seattlesolvers.solverslib.command.SubsystemBase;
+import com.seattlesolvers.solverslib.hardware.motors.Motor;
+import com.seattlesolvers.solverslib.hardware.motors.MotorEx;
+import com.seattlesolvers.solverslib.hardware.motors.MotorGroup;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.robot.Constants;
-import org.firstinspires.ftc.teamcode.robot.Logger;
+import org.firstinspires.ftc.teamcode.robot.MyConstants;
 
 public class Shooter extends SubsystemBase {
     private final MotorGroup flywheel;
     private double targetPower = 0;
     private double targetVelocity = 0;
     private boolean isRunning = false;
-    Motor leftFlywheel;
-    Motor rightFlywheel;
+    MotorEx leftFlywheel;
+    MotorEx rightFlywheel;
 
     double testPower = 0.1;
 
     boolean control = false;
 
     public Shooter(HardwareMap hardwareMap) {
-        leftFlywheel = getMotor(hardwareMap, "leftFlywheel", false, Motor.GoBILDA.BARE);
-        rightFlywheel = getMotor(hardwareMap, "rightFlywheel", true, Motor.GoBILDA.BARE);
+        leftFlywheel = new MotorEx(hardwareMap, "leftFlywheel");
+        rightFlywheel = new MotorEx(hardwareMap, "rightFlywheel");
 
         flywheel = new MotorGroup(leftFlywheel, rightFlywheel);
 
@@ -33,14 +35,14 @@ public class Shooter extends SubsystemBase {
         flywheel.setRunMode(Motor.RunMode.VelocityControl);
 
         flywheel.setVeloCoefficients(
-                Constants.Shooter.kP,
-                Constants.Shooter.kI,
-                Constants.Shooter.kD
+                MyConstants.Shooter.kP,
+                MyConstants.Shooter.kI,
+                MyConstants.Shooter.kD
         );
         flywheel.setFeedforwardCoefficients(
-                Constants.Shooter.kS,
-                Constants.Shooter.kV,
-                Constants.Shooter.kA
+                MyConstants.Shooter.kS,
+                MyConstants.Shooter.kV,
+                MyConstants.Shooter.kA
         );
     }
 
@@ -52,14 +54,14 @@ public class Shooter extends SubsystemBase {
         motor.setRunMode(Motor.RunMode.VelocityControl);
 
         motor.setVeloCoefficients(
-                Constants.Shooter.kP,
-                Constants.Shooter.kI,
-                Constants.Shooter.kD
+                MyConstants.Shooter.kP,
+                MyConstants.Shooter.kI,
+                MyConstants.Shooter.kD
         );
         motor.setFeedforwardCoefficients(
-                Constants.Shooter.kS,
-                Constants.Shooter.kV,
-                Constants.Shooter.kA
+                MyConstants.Shooter.kS,
+                MyConstants.Shooter.kV,
+                MyConstants.Shooter.kA
         );
 
         return motor;
@@ -80,7 +82,7 @@ public class Shooter extends SubsystemBase {
         }
 
         this.targetPower = power;
-        this.targetVelocity = Constants.Shooter.MAX_RPM * power;
+        this.targetVelocity = MyConstants.Shooter.MAX_RPM * power;
     }
 
     public void startFlywheel() {
@@ -100,11 +102,11 @@ public class Shooter extends SubsystemBase {
     }
 
     public boolean isReady() {
-        return getVelocity() >= (targetVelocity - Constants.Shooter.VELOCITY_TOLERANCE);
+        return getVelocity() >= (targetVelocity - MyConstants.Shooter.VELOCITY_TOLERANCE);
     }
 
     public boolean isReady(double speedPercent) {
-        return getVelocity() >= (targetVelocity * speedPercent - Constants.Shooter.VELOCITY_TOLERANCE);
+        return getVelocity() >= (targetVelocity * speedPercent - MyConstants.Shooter.VELOCITY_TOLERANCE);
     }
 
     public double getVelocity() {
@@ -127,7 +129,7 @@ public class Shooter extends SubsystemBase {
         return flywheel != null;
     }
 
-    public void updateTelemetry(Telemetry telemetry, Logger logger) {
+    public void updateTelemetry(Telemetry telemetry) {
         telemetry.addData(getName() + " Healthy", isHealthy());
         telemetry.addData(getName() + " Test", getTest());
         telemetry.addData(getName() + " Power", getTargetPower());
@@ -135,58 +137,5 @@ public class Shooter extends SubsystemBase {
         telemetry.addData(getName() + " Target", getTargetVelocity());
         telemetry.addData(getName() + " Ready", isReady());
         telemetry.addData(getName() + " Control", control);
-
-        if (logger != null) {
-            logger.put(getName() + " Healthy", isHealthy());
-            logger.put(getName() + " Power", getTargetPower());
-            logger.put(getName() + " Velocity", getVelocity());
-            logger.put(getName() + " Target", getTargetVelocity());
-            logger.put(getName() + " Ready", isReady());
-        }
-    }
-
-    public Action maintainVelocity() {
-        return new Action() {
-            @Override
-            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                if (isRunning) {
-                    flywheel.set(targetPower);
-                } else {
-                    flywheel.set(0);
-                }
-
-                return true;
-            }
-        };
-    }
-
-    public Action startShooter() {
-        return new Action() {
-            @Override
-            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                isRunning = true;
-
-                return !isReady();
-            }
-        };
-    }
-
-    public Action stopShooter() {
-        return new Action() {
-            @Override
-            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                isRunning = false;
-
-                return false;
-            }
-        };
-    }
-
-    public void powerControl() {
-        if (control == false) {
-            control = true;
-        } else {
-            control = false;
-        }
     }
 }
